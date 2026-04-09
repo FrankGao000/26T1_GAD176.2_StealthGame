@@ -2,15 +2,53 @@ using UnityEngine;
 
 public class ItemEvent : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   public AudioClip selectionFeedback;
+    public AudioClip turretFeedback;
+
+    public AudioSource selectionSource;
+
+    //access type name
+    public delegate void ItemDelegate();
+    
+    
+    
+    
+    
+    
+    
+    public ItemDelegate onSelectionShowInfo;
+    public ItemDelegate onTurretDeath;
+
+
+    private void OnEnable()
     {
-        
+        onSelectionShowInfo += ShowInformation;
+        onTurretDeath += TurretItemDrop;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        onSelectionShowInfo -= ShowInformation;
+        onTurretDeath -= TurretItemDrop;
     }
+
+    private void ShowInformation()
+    {
+
+        // AUDIO
+        selectionSource.PlayOneShot(selectionFeedback);
+        // STRING TEXT
+        // PHYSICAL ITEM
+    }
+
+    private void TurretItemDrop()
+    {
+        // AUDI
+        selectionSource.PlayOneShot(turretFeedback);
+        // STRING TEXT
+        Debug.Log("Turret dropped misc item");
+        // PHYSICAL ITEM
+    }
+
+
 }
