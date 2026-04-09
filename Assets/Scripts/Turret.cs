@@ -221,7 +221,7 @@ public class Turret : IthielScript
 
             targetRotation = Mathf.Clamp(targetRotation, -turret.LeftLimit, turret.rightLimit);
             limitedRotationAngle = Mathf.MoveTowards(limitedRotationAngle, targetRotation, turret.RotationSpeed * Time.deltaTime);
-
+            //Need a reference for epsilon
             if (Mathf.Abs(limitedRotationAngle) > Mathf.Epsilon)
             {
                 turretBase.localEulerAngles = Vector3.up * limitedRotationAngle;

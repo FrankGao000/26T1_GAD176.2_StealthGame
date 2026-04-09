@@ -1098,7 +1098,7 @@ MonoBehaviour:
   barrelBase: {fileID: 4325962096032330026}
   turret: {fileID: 11400000, guid: 73522ec8fe620064ba17d3a17c141a24, type: 2}
   targetBlock: {fileID: 0}
-  isIdle: 1
+  isIdle: 0
 --- !u!1 &8007982827975662011
 GameObject:
   m_ObjectHideFlags: 0
