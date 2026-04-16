@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class VisionDetector : MonoBehaviour
 
-    // RotatingItem is a seperate script that is referenced here
-    // VisionDetector is like the engine while RotatingItem is the output.
+    /// NOTE: RotatingItem is a seperate script that is referenced here
+    /// NOTE: VisionDetector is like the engine while RotatingItem is the output.
 
 {
     [SerializeField] public float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
