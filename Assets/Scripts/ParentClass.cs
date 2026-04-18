@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class IthielScript : MonoBehaviour
+public class ParentClass : MonoBehaviour
 {
     [SerializeField]
     private bool debugMode = false;

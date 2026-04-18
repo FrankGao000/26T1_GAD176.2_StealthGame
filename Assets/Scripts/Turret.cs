@@ -1,5 +1,5 @@
 using UnityEngine;
-public class Turret : IthielScript
+public class Turret : ParentClass
 {
     #region References for the object
     [Header("Base References")]
