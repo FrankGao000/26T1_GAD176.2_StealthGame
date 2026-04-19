@@ -154,10 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193da21dcdaae974689a36d41f6b45ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 7648224453912079340}
-  damage: 10
+  maxHealth: 20
+  damage: 5
   type: 0
-  rate: 1
+  damageRate: 0.5
+  alertRate: 0.25
 --- !u!1 &7695536405327898139
 GameObject:
   m_ObjectHideFlags: 0
