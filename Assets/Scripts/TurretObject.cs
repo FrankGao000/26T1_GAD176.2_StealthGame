@@ -11,9 +11,11 @@ public class TurretObject : ScriptableObject
     // Prefab of the bullet
     [SerializeField]
     private GameObject bulletPrefab;
+    public GameObject  GetBulletPrefab => bulletPrefab;
 
     [SerializeField]
     private float damage;
+    public float GetDamage => damage;
 
 
     // Reference to the stat script
@@ -25,11 +27,13 @@ public class TurretObject : ScriptableObject
     [Tooltip("Player must be in vision for this amount before the turret starts shooting and tracking")]
     [SerializeField, Range(0.2f, 3f)]
     private float recognitionTimer = 0.5f;
+    public float GetRecognitionTimer => recognitionTimer;
 
     // Cooldown Between Attacks
     [Tooltip("The cooldown between attacks")]
     [SerializeField]
     private float attackCooldown = 1f;
+    public float GetAttackCooldown => attackCooldown;
 
     [Header("Behaviour - Rotation")]
     // Rotation Speed of the turret
@@ -75,6 +79,7 @@ public class TurretObject : ScriptableObject
     // Range for the turret to start raycasting & knows where the player is
     [SerializeField]
     private float awareRadius = 20f;
+    public float GetAwareRadius => awareRadius;
 
     // How close should the barrel's aim be before being "Locked in"
     [Tooltip("The furthest angle from the turret to the target before being 'aimed' ")]

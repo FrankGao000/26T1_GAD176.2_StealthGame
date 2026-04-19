@@ -55,6 +55,9 @@ public class Turret : ParentClass
     /// true when the turret is aiming at the target
     /// </summary>
     public bool IsAimed => aimed;
+    private float attackCooldown = 0f;
+    private bool inRange;
+    private float recognitionTimer = 0f;
     #endregion
 
     #region Position at rest
@@ -69,6 +72,20 @@ public class Turret : ParentClass
     public void Shoot()
     {
         // Shooting Function
+        Debug.Log("I'm shooting now");
+        GameObject projectileShot = Instantiate(turret.GetBulletPrefab, barrelBase.position + barrelBase.forward * 0.5f, barrelBase.rotation, transform);
+        
+        if(projectileShot.TryGetComponent<Projectiles>(out var proj))
+        {
+            proj.SetDamage(turret.GetDamage);
+           Debug.Log("YEA");
+        }
+
+        
+        if(projectileShot.TryGetComponent<Rigidbody>(out var projRB))
+        {
+            projRB.linearVelocity = barrelBase.forward * 90f;
+        }
     }
 
 
@@ -99,6 +116,23 @@ public class Turret : ParentClass
         {
             return;
         }
+        
+        attackCooldown -= Time.deltaTime;
+        inRange = Vector3.Distance(transform.position, AimPosition) <= turret.GetAwareRadius;
+        if (inRange)
+        {
+            recognitionTimer += Time.deltaTime;
+
+            if (recognitionTimer >= turret.GetRecognitionTimer)
+            {
+                isIdle = false;
+            }
+        }
+        else
+        {
+            recognitionTimer = 0f;
+            isIdle = true;
+        }
 
         if (isIdle)
         {
@@ -128,6 +162,14 @@ public class Turret : ParentClass
 
             barrelAtRest = false;
             baseAtRest = false;
+            if (aimed && attackCooldown <= 0f)
+            {
+                Shoot();
+                attackCooldown = turret.GetAttackCooldown;
+            } else if (!inRange)
+            {
+                attackCooldown = 0f;
+            }
         }
     }
 

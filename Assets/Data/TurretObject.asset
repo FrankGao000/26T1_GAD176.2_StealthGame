@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TurretObject
   m_EditorClassIdentifier: 
   turretName: Machine Gun Turret
-  bulletPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 3818933293795440653, guid: b19dbf72d902f6c48999d57cca3cd926, type: 3}
   damage: 0
   recognitionTimer: 0.5
   attackCooldown: 1
