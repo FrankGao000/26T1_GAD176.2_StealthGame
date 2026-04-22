@@ -2,82 +2,61 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
-
-    [SerializeField] public float throwForce = 10f; // Separate force for throwing
-    [SerializeField] public float dropForce = 2f;   // Separate force for dropping
+    [SerializeField] public float throwForce = 10f; // strong force so physics can go wild
+    [SerializeField] public float dropForce = 2f; // weak force cause i hit my Learning Outcome one line earlier lmao
     [SerializeField] public float distance;
     [SerializeField] public bool canHold = true;
-    [SerializeField] public bool isHolding = false; // Start NOT holding (prevents bugs)
 
-    [SerializeField] Vector3 objectPos;
-    [SerializeField] public GameObject item;
-    [SerializeField] public GameObject tempParent;
-    [SerializeField] private VisionDetector vision; // Adding connectivity between pickUp and my VisionDetector script so that the raycast information can be processed and sent over here
+    [SerializeField] public GameObject item; // The item or well "Interactable" may change this cause item is no longer correct with the game logic
+    [SerializeField] public GameObject tempParent; // Where the item is held, an empty game object
+    [SerializeField] private VisionDetector vision; // Connects back to the visionDetector, so it can interact with the raycast
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    [SerializeField] private Interactable currentInteractable;
+    [SerializeField] private bool isHolding = false;
 
-    }
-
-    // Update is called once per frame
     void Update()
-
     {
-        if (vision == null) return;  // If visiondetector isnt added in the inspector for PickUp on the player, return null (good if the player using this scaffold doesnt set up properly)
+        if (vision == null || tempParent == null) return;
 
-        if (tempParent == null) return; // Prevent errors if tempParent isn't assigned
-
-        // ONLY assign item if NOT holding something (prevents switching items mid-hold)
-        if (!isHolding && vision.currentItem != null)
+        if (!isHolding && vision.currentItem != null)  // Only detect new item if not holding
         {
             item = vision.currentItem;
+            currentInteractable = item.GetComponent<Interactable>();
         }
 
-        if (item == null) return; // If no item detected, stop here
+        if (item == null || currentInteractable == null) return;
 
-        distance = Vector3.Distance(transform.position, item.transform.position); //  distance now checks from player to item (not tempParent, as when that was assigned, it would not detect unless at a very specific angle)
+        distance = Vector3.Distance(transform.position, item.transform.position);
 
-        // PICK UP (LEFT CLICK) - only if NOT already holding
-        if (!isHolding && Input.GetMouseButtonDown(0) && distance <= 3f && canHold) // Makes sure that the player is close enough to the item AND that the boolean for holding it is checked (it is automatically checked)
+        // PICKUP (This is assigned to the left click because it is what we use most often, (I think thats because most of the population is right-handed))
+        if (!isHolding && Input.GetMouseButtonDown(0) && distance <= 3f && canHold)
         {
             isHolding = true;
-
-            Rigidbody rb = item.GetComponent<Rigidbody>();
-            rb.useGravity = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            item.transform.SetParent(tempParent.transform);
+            currentInteractable.OnPickup(tempParent.transform);
         }
 
-        if (isHolding) // the below happens while the object is being held by the player, if these mouse-buttons are pressed outside of this action they do nothing.
+        if (isHolding)
         {
-            // Keeps the item locked to the hold position
             item.transform.position = tempParent.transform.position;
 
-            if (Input.GetMouseButtonDown(1)) // this is my THROW function 
+            // THROW (This is assigned to the right click!)
+            if (Input.GetMouseButtonDown(1))
             {
-                Rigidbody rb = item.GetComponent<Rigidbody>();
-
-                item.transform.SetParent(null);
-                rb.useGravity = true;
-                rb.AddForce(tempParent.transform.forward * throwForce, ForceMode.Impulse); // Stronger force
+                currentInteractable.OnThrow(tempParent.transform.forward * throwForce); // Call throw behavior with strong force, opposed to drop which has a weaker force
 
                 isHolding = false;
-                item = null; // Clear reference so it doesn't bug out
+                item = null;
+                currentInteractable = null;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q)) // this is my DROP function (changed from left click to avoid conflict)
+            // DROP (This is assigned Q button cause middle mouse felt too awkward)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                Rigidbody rb = item.GetComponent<Rigidbody>();
-
-                item.transform.SetParent(null);
-                rb.useGravity = true;
-                rb.AddForce(tempParent.transform.forward * dropForce, ForceMode.Impulse); // Smaller force
+                currentInteractable.OnDrop(tempParent.transform.forward * dropForce); // Has drop behavior with weaker force, should fall straight down
 
                 isHolding = false;
-                item = null; // Clear reference
+                item = null;
+                currentInteractable = null;
             }
         }
     }

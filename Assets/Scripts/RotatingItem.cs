@@ -1,13 +1,12 @@
 using UnityEngine;
 
-public class RotatingItem : MonoBehaviour
+public class RotatingItem : Interactable
 
-    // This is where the rotating happens! actually really simple, and the IsRotating is just troubleshooting that isn't necessary BUT saves unnessecary data usage
+// This is where the rotating happens! actually really simple, and the IsRotating is just troubleshooting that isn't necessary BUT saves unnessecary data usage
 {
     [SerializeField] public float rotationSpeed = 100f; //Speed
     [SerializeField] private bool isRotating = false; // rotating yes or no, this is honestly just damage control.
     [SerializeField] private AudioSource audioSource;
-
 
     void Start()
     {
@@ -33,11 +32,11 @@ public class RotatingItem : MonoBehaviour
             }
         }
 
-            isRotating = false; // This is a failsafe that resets every frame (update) so that the item doesn't rotate when the raycast isn't looked at
+        isRotating = false; // This is a failsafe that resets every frame (update) so that the item doesn't rotate when the raycast isn't looked at
     }
 
-    public void StartRotating()
+    public override void OnLook()
     {
-        isRotating = true; // This is triggered back in Vision Detection, makes sure the item is rotating.
+        isRotating = true; // This overrides Onlook to make way for rotating boolean to be true and rotating logic be true
     }
 }
