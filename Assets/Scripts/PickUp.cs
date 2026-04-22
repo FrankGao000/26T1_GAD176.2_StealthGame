@@ -2,17 +2,21 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
-    [SerializeField] public float throwForce = 10f; // strong force so physics can go wild
-    [SerializeField] public float dropForce = 2f; // weak force cause i hit my Learning Outcome one line earlier lmao
-    [SerializeField] public float distance;
-    [SerializeField] public bool canHold = true;
+    [SerializeField] private float throwForce = 10f; // strong force so physics can go wild
+    [SerializeField] private float dropForce = 2f; // weak force cause i hit my Learning Outcome one line earlier lmao
+    private float distance; // No need for Serializefield as it is a variable that isnt manually altered and is instead affected by vector logic
 
-    [SerializeField] public GameObject item; // The item or well "Interactable" may change this cause item is no longer correct with the game logic
-    [SerializeField] public GameObject tempParent; // Where the item is held, an empty game object
+    private GameObject item; // No SF as I only needed this for making sure my items were being detected during testing
+    [SerializeField] private GameObject tempParent; // Where the item is held, an empty game object
     [SerializeField] private VisionDetector vision; // Connects back to the visionDetector, so it can interact with the raycast
 
-    [SerializeField] private Interactable currentInteractable;
-    [SerializeField] private bool isHolding = false;
+    private Interactable currentInteractable; // There is no need for me to see this in the inspector as it tells me nothing, hence no SF
+    private bool isHolding = false;
+    private bool canHold = true;
+
+    /// The booleans only had SerializeFields when I was testing things out, since I no longer need to see them as they work, I have removed them
+    /// SF = SerializedField
+
 
     void Update()
     {

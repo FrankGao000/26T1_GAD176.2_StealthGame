@@ -3,8 +3,8 @@ using UnityEngine;
 public class VisionDetector : MonoBehaviour
 
 {
-    [SerializeField] public float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
-    [SerializeField] public GameObject currentItem; // still shared for PickUp
+    [SerializeField] private float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
+    public GameObject currentItem; // SF was only needed for testing purposes
 
     void Update()
     {
