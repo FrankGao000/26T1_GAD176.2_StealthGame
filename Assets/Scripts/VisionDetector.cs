@@ -7,6 +7,7 @@ public class VisionDetector : MonoBehaviour
 
 {
     [SerializeField] public float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
+    [SerializeField] public GameObject currentItem; // I need visiondetector to share what the raycast detects with other scripts
 
     void Update()
     {
@@ -15,12 +16,17 @@ public class VisionDetector : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, range)) // This checks to see if the raycast hits anything in front of it, we are checking for script RotatingItem
         {
+            currentItem = hit.collider.gameObject; // acts as a storage container for the gameobject once detected
             RotatingItem item = hit.collider.GetComponent<RotatingItem>(); // Connects the component of RotatingItem Script to VisionDetector script
 
             if (item != null) // If the object has RotatingItem attached, start function (continued in RotatingItem Script)
             {
                 item.StartRotating();
             }
+        }
+        else
+        {
+            currentItem = null;
         }
     }
 }

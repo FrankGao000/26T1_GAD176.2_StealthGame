@@ -3,14 +3,16 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
 
-    [SerializeField] public int force;
+    [SerializeField] public float throwForce = 10f; // Separate force for throwing
+    [SerializeField] public float dropForce = 2f;   // Separate force for dropping
     [SerializeField] public float distance;
     [SerializeField] public bool canHold = true;
-    [SerializeField] public bool isHolding = true;
+    [SerializeField] public bool isHolding = false; // Start NOT holding (prevents bugs)
 
     [SerializeField] Vector3 objectPos;
     [SerializeField] public GameObject item;
     [SerializeField] public GameObject tempParent;
+    [SerializeField] private VisionDetector vision; // Adding connectivity between pickUp and my VisionDetector script so that the raycast information can be processed and sent over here
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,51 +22,63 @@ public class PickUp : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+
     {
-        distance = Vector3.Distance(item.transform.position, tempParent.transform.position);
-        if (distance >= 3f)
+        if (vision == null) return;  // If visiondetector isnt added in the inspector for PickUp on the player, return null (good if the player using this scaffold doesnt set up properly)
+
+        if (tempParent == null) return; // Prevent errors if tempParent isn't assigned
+
+        // ONLY assign item if NOT holding something (prevents switching items mid-hold)
+        if (!isHolding && vision.currentItem != null)
         {
-            isHolding = false;
+            item = vision.currentItem;
         }
 
-        if (Input.GetMouseButtonDown(0)) // 0 is Left mouse click as this is an easy accessible button for the player, and it feels comfortable
-        {
+        if (item == null) return; // If no item detected, stop here
 
-            if (isHolding == true)
-            {
-                isHolding = false;
-            }
-        }
+        distance = Vector3.Distance(transform.position, item.transform.position); //  distance now checks from player to item (not tempParent, as when that was assigned, it would not detect unless at a very specific angle)
 
-        else
-            if (distance <= 3f)
+        // PICK UP (LEFT CLICK) - only if NOT already holding
+        if (!isHolding && Input.GetMouseButtonDown(0) && distance <= 3f && canHold) // Makes sure that the player is close enough to the item AND that the boolean for holding it is checked (it is automatically checked)
         {
             isHolding = true;
-            item.GetComponent<Rigidbody>().useGravity = false; // If item is being held there is no rigid-body, if there was there may be clipping shenaningans.
-        }
 
-        if (isHolding == true)
-        {
-            item.GetComponent<Rigidbody>().linearVelocity = Vector3.zero; /// NOTE: Original guide [https://discussions.unity.com/t/pick-up-and-throw-object/770376] called for Velocity = Vector3.zero but that is no longer useable in Unity 6, so it was changed to linearVelocity = Vector3.zero
-            item.GetComponent<Rigidbody>().angularVelocity = Vector3.zero; // This is the upwards vector, that alongside linearVelocity allows for a "sloped" vector, as this is a "throw" function
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
             item.transform.SetParent(tempParent.transform);
-
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.forward * force); isHolding = false;
-            }
-
-            else
-            {
-                objectPos = item.transform.position;
-                item.transform.SetParent(null);
-                item.GetComponent<Rigidbody>().useGravity = true; // When item isn't being held by the character, it now has gravity
-                item.transform.position = objectPos;
-            }
-
         }
 
+        if (isHolding) // the below happens while the object is being held by the player, if these mouse-buttons are pressed outside of this action they do nothing.
+        {
+            // Keeps the item locked to the hold position
+            item.transform.position = tempParent.transform.position;
 
+            if (Input.GetMouseButtonDown(1)) // this is my THROW function 
+            {
+                Rigidbody rb = item.GetComponent<Rigidbody>();
+
+                item.transform.SetParent(null);
+                rb.useGravity = true;
+                rb.AddForce(tempParent.transform.forward * throwForce, ForceMode.Impulse); // Stronger force
+
+                isHolding = false;
+                item = null; // Clear reference so it doesn't bug out
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q)) // this is my DROP function (changed from left click to avoid conflict)
+            {
+                Rigidbody rb = item.GetComponent<Rigidbody>();
+
+                item.transform.SetParent(null);
+                rb.useGravity = true;
+                rb.AddForce(tempParent.transform.forward * dropForce, ForceMode.Impulse); // Smaller force
+
+                isHolding = false;
+                item = null; // Clear reference
+            }
+        }
     }
 }
