@@ -48,3 +48,9 @@ public class Interactable : MonoBehaviour
         }
     }
 }
+
+///Resources used
+///https://www.youtube.com/watch?v=8TIkManpEu4 (For general override basics and inheritance functionality
+///https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/inheritance
+///https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/virtual
+///https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/polymorphism
