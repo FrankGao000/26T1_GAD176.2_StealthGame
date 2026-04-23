@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 127af1882aaf3a0409966bb00021c417, type: 3}
-  m_Name: TurretObject
+  m_Name: InsideWall
   m_EditorClassIdentifier: 
-  turretName: Machine Gun Turret
+  turretName: Turret01
   bulletPrefab: {fileID: 3818933293795440653, guid: b19dbf72d902f6c48999d57cca3cd926, type: 3}
   damage: 1
   recognitionTimer: 1.51
   attackCooldown: 0.11
-  rotationSpeed: 90
+  rotationSpeed: 60
   rotationLimit: 1
-  leftRotationLimit: 46
-  rigthRotationLimit: 46
+  leftRotationLimit: 44.6
+  rigthRotationLimit: 45.3
   elevationSpeed: 30
   maxElevation: 45
   maxDepression: 15

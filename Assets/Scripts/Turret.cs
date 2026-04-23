@@ -84,8 +84,33 @@ public class Turret : ParentClass
         
         if(projectileShot.TryGetComponent<Rigidbody>(out var projRB))
         {
-            projRB.linearVelocity = barrelBase.forward * 90f;
+            projRB.linearVelocity = barrelBase.forward * 80f;
         }
+    }
+    private bool InVision()
+    {
+        if(!inRange)
+        {
+            return false;
+        }
+        
+        Vector3 targetDirection = AimPosition - transform.position;
+
+        float angle = Vector3.SignedAngle(transform.forward, targetDirection, transform.up);
+        if(angle < -turret.LeftLimit * 0.75f || angle > turret.rightLimit * 0.75f)
+        {
+            return false;
+        }
+
+        if (Physics.Raycast(transform.position, targetDirection.normalized, out RaycastHit hit, turret.GetAwareRadius, LayerMask.GetMask("Player", "Environment")))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -121,11 +146,11 @@ public class Turret : ParentClass
         inRange = Vector3.Distance(transform.position, AimPosition) <= turret.GetAwareRadius;
         if (inRange)
         {
+            if (InVision())
+            {
             recognitionTimer += Time.deltaTime;
 
-            if (recognitionTimer >= turret.GetRecognitionTimer)
-            {
-                isIdle = false;
+            if (recognitionTimer >= turret.GetRecognitionTimer) isIdle = false;
             }
         }
         else

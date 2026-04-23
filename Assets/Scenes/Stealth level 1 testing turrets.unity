@@ -825,7 +825,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2114301102163507814, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.685
+      value: 9.22
       objectReference: {fileID: 0}
     - target: {fileID: 2114301102163507814, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -833,7 +833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2114301102163507814, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.882
+      value: 8.379
       objectReference: {fileID: 0}
     - target: {fileID: 2114301102163507814, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -867,6 +867,10 @@ PrefabInstance:
       propertyPath: isIdle
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4794760277102272047, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
+      propertyPath: turret
+      value: 
+      objectReference: {fileID: 11400000, guid: c8e9ce112e05c1f42b48c51f9c10ba1a, type: 2}
     - target: {fileID: 4794760277102272047, guid: 2315ac76dd4bb0e44add1baeb99e6db6, type: 3}
       propertyPath: targetBlock
       value: 

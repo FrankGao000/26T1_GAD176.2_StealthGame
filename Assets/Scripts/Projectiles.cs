@@ -10,9 +10,9 @@ public class Projectiles : MonoBehaviour
         damage = dmg;
     }
 
-    public void SetLifetime(float lifetime)
+    public void Awake()
     {
-        projectileLifetime = lifetime;
+        projectileLifetime = 2.5f;
         Destroy(gameObject, projectileLifetime);
     }
 
@@ -30,7 +30,7 @@ public class Projectiles : MonoBehaviour
             }
         
         }
-        if(other.transform.root.gameObject != transform.root.gameObject && other.gameObject.layer != LayerMask.NameToLayer("Environment"))
+        if(other.transform.root.gameObject != transform.root.gameObject && other.gameObject.layer != LayerMask.NameToLayer("Traps"))
         {
             Destroy(gameObject);
         }
