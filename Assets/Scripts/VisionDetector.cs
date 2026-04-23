@@ -2,25 +2,29 @@ using UnityEngine;
 
 public class VisionDetector : MonoBehaviour
 
-    /// NOTE: RotatingItem is a seperate script that is referenced here
-    /// NOTE: VisionDetector is like the engine while RotatingItem is the output.
-
 {
-    [SerializeField] public float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
+    [SerializeField] private float range = 5f; // the "Range" is the Vision range, and how far the character must look for this whole thing to trigger
+    public GameObject currentItem; // SF was only needed for testing purposes
 
     void Update()
     {
         Ray ray = new Ray(transform.position, transform.forward); // Since this is attached to the camera, it starts at the cameras POSITION and goes FORWARD
         RaycastHit hit; // This is storing information, hit is commonly used as a raycast variable
 
-        if (Physics.Raycast(ray, out hit, range)) // This checks to see if the raycast hits anything in front of it, we are checking for script RotatingItem
+        if (Physics.Raycast(ray, out hit, range))
         {
-            RotatingItem item = hit.collider.GetComponent<RotatingItem>(); // Connects the component of RotatingItem Script to VisionDetector script
+            currentItem = hit.collider.gameObject;
 
-            if (item != null) // If the object has RotatingItem attached, start function (continued in RotatingItem Script)
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+
+            if (interactable != null)
             {
-                item.StartRotating();
+                interactable.OnLook(); // Works for ANY child class (before this it was specific for the RotatingItem, this is better for versatility in a scaffold
             }
+        }
+        else
+        {
+            currentItem = null;
         }
     }
 }

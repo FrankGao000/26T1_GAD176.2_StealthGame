@@ -2,69 +2,66 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
+    [SerializeField] private float throwForce = 10f; // strong force so physics can go wild
+    [SerializeField] private float dropForce = 2f; // weak force cause i hit my Learning Outcome one line earlier lmao
+    private float distance; // No need for Serializefield as it is a variable that isnt manually altered and is instead affected by vector logic
 
-    [SerializeField] public int force;
-    [SerializeField] public float distance;
-    [SerializeField] public bool canHold = true;
-    [SerializeField] public bool isHolding = true;
+    private GameObject item; // No SF as I only needed this for making sure my items were being detected during testing
+    [SerializeField] private GameObject tempParent; // Where the item is held, an empty game object
+    [SerializeField] private VisionDetector vision; // Connects back to the visionDetector, so it can interact with the raycast
 
-    [SerializeField] Vector3 objectPos;
-    [SerializeField] public GameObject item;
-    [SerializeField] public GameObject tempParent;
+    private Interactable currentInteractable; // There is no need for me to see this in the inspector as it tells me nothing, hence no SF
+    private bool isHolding = false;
+    private bool canHold = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    /// The booleans only had SerializeFields when I was testing things out, since I no longer need to see them as they work, I have removed them
+    /// SF = SerializedField
 
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        distance = Vector3.Distance(item.transform.position, tempParent.transform.position);
-        if (distance >= 3f)
+        if (vision == null || tempParent == null) return;
+
+        if (!isHolding && vision.currentItem != null)  // Only detect new item if not holding
         {
-            isHolding = false;
+            item = vision.currentItem;
+            currentInteractable = item.GetComponent<Interactable>();
         }
 
-        if (Input.GetMouseButtonDown(0)) // 0 is Left mouse click as this is an easy accessible button for the player, and it feels comfortable
-        {
+        if (item == null || currentInteractable == null) return;
 
-            if (isHolding == true)
-            {
-                isHolding = false;
-            }
-        }
+        distance = Vector3.Distance(transform.position, item.transform.position);
 
-        else
-            if (distance <= 3f)
+        // PICKUP (This is assigned to the left click because it is what we use most often, (I think thats because most of the population is right-handed))
+        if (!isHolding && Input.GetMouseButtonDown(0) && distance <= 3f && canHold)
         {
             isHolding = true;
-            item.GetComponent<Rigidbody>().useGravity = false; // If item is being held there is no rigid-body, if there was there may be clipping shenaningans.
+            currentInteractable.OnPickup(tempParent.transform);
         }
 
-        if (isHolding == true)
+        if (isHolding)
         {
-            item.GetComponent<Rigidbody>().linearVelocity = Vector3.zero; /// NOTE: Original guide [https://discussions.unity.com/t/pick-up-and-throw-object/770376] called for Velocity = Vector3.zero but that is no longer useable in Unity 6, so it was changed to linearVelocity = Vector3.zero
-            item.GetComponent<Rigidbody>().angularVelocity = Vector3.zero; // This is the upwards vector, that alongside linearVelocity allows for a "sloped" vector, as this is a "throw" function
-            item.transform.SetParent(tempParent.transform);
+            item.transform.position = tempParent.transform.position;
 
-
+            // THROW (This is assigned to the right click!)
             if (Input.GetMouseButtonDown(1))
             {
-                item.GetComponent<Rigidbody>().AddForce(tempParent.transform.forward * force); isHolding = false;
+                currentInteractable.OnThrow(tempParent.transform.forward * throwForce); // Call throw behavior with strong force, opposed to drop which has a weaker force
+
+                isHolding = false;
+                item = null;
+                currentInteractable = null;
             }
 
-            else
+            // DROP (This is assigned Q button cause middle mouse felt too awkward)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                objectPos = item.transform.position;
-                item.transform.SetParent(null);
-                item.GetComponent<Rigidbody>().useGravity = true; // When item isn't being held by the character, it now has gravity
-                item.transform.position = objectPos;
+                currentInteractable.OnDrop(tempParent.transform.forward * dropForce); // Has drop behavior with weaker force, should fall straight down
+
+                isHolding = false;
+                item = null;
+                currentInteractable = null;
             }
-
         }
-
-
     }
 }
