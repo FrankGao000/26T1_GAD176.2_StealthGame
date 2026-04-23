@@ -69,6 +69,31 @@ public class Turret : ParentClass
     private bool TurretAtRest => barrelAtRest && baseAtRest;
     #endregion
 
+private bool InVision()
+    {
+        if(!inRange)
+        {
+            return false;
+        }
+        
+        Vector3 targetDirection = AimPosition - transform.position;
+
+        float angle = Vector3.SignedAngle(transform.forward, targetDirection, transform.up);
+        if(angle < -turret.LeftLimit * 0.75f || angle > turret.rightLimit * 0.75f)
+        {
+            return false;
+        }
+
+        if (Physics.Raycast(transform.position, targetDirection.normalized, out RaycastHit hit, turret.GetAwareRadius, LayerMask.GetMask("Player", "Environment")))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public void Shoot()
     {
         // Shooting Function
@@ -263,7 +288,7 @@ public class Turret : ParentClass
 
             targetRotation = Mathf.Clamp(targetRotation, -turret.LeftLimit, turret.rightLimit);
             limitedRotationAngle = Mathf.MoveTowards(limitedRotationAngle, targetRotation, turret.RotationSpeed * Time.deltaTime);
-            //Need a reference for epsilon
+            //mathf.Epsilon is to stop the turret from needing mathematically perfect zero before being considered finished rotating.
             if (Mathf.Abs(limitedRotationAngle) > Mathf.Epsilon)
             {
                 turretBase.localEulerAngles = Vector3.up * limitedRotationAngle;

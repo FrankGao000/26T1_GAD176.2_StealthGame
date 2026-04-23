@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//This script is for handling the debug log system for the base class 
 public class ParentClass : MonoBehaviour
 {
     [SerializeField]
