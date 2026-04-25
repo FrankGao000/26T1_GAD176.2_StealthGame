@@ -1,3 +1,4 @@
+//This script is for the data for the turrets to function.
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TurretObject", menuName = "Turrets/Turret Object Data")]
@@ -16,10 +17,6 @@ public class TurretObject : ScriptableObject
     [SerializeField]
     private float damage;
     public float GetDamage => damage;
-
-
-    // Reference to the stat script
-
 
 
     [Header("Turret - Behaviour")]

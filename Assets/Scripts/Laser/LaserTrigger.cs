@@ -1,3 +1,4 @@
+// This scripts is for the collider of the laser traps
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class LaserTrigger : MonoBehaviour
 {
     [SerializeField]
     private ITrigerrable laser;
-    [SerializeField] private List<Material> materials;
+    [SerializeField] private List<Material> materials; // This is the for the materials for both traps, green for alert, and red for damage.
     private Renderer rend;
     void Awake()
     {

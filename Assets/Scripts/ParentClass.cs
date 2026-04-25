@@ -1,3 +1,4 @@
+//This script is just for debugging. 
 using UnityEngine;
 
 public class ParentClass : MonoBehaviour

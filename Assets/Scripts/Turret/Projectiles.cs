@@ -1,3 +1,4 @@
+// This is the script for the projectiles of the turrets which are bullets.
 using UnityEngine;
 
 public class Projectiles : MonoBehaviour
@@ -16,7 +17,7 @@ public class Projectiles : MonoBehaviour
         Destroy(gameObject, projectileLifetime);
     }
 
-
+//This is for checking if the bullet hit the player character or the wall.
     void OnCollisionEnter(Collision other)
     {
         Debug.Log($"Entering fire range!!!");

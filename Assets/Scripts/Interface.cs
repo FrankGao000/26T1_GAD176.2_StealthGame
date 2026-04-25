@@ -1,3 +1,4 @@
+//These are the interfaces use by the other scripts that defines what they have to do.
 using UnityEngine;
 
 public interface ITrigerrable

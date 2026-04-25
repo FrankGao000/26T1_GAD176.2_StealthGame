@@ -1,3 +1,4 @@
+//This script is the player's Health for game testing my turrets and laser traps
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable

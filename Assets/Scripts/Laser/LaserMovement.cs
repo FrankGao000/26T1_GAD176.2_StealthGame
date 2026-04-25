@@ -1,3 +1,4 @@
+//This script is for the Laser trap movement.
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -9,9 +10,9 @@ public class LaserMovement : MonoBehaviour
     
      void Start ()
      {
-        startPos = transform.position;
+        startPos = transform.position; 
      }
-    // Update is called once per frame
+    //I'm using PingPong Unity Method to make the laser moving backwards and forwards.
     void Update()
     {
         float time = Mathf.PingPong(Time.time * Speed,1f);

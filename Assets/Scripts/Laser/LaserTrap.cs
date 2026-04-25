@@ -1,7 +1,10 @@
+//This the the script of the Laser Trap
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+//ITrigerrable is for the child objects (Laser itself) to interact with the parent objects (Laser Trap)
+//Idamageable just making the Player and the laser traps are damageable.
 public class LaserTrap : MonoBehaviour, ITrigerrable, IDamageable
 {
     private class TargetData
@@ -17,7 +20,9 @@ public class LaserTrap : MonoBehaviour, ITrigerrable, IDamageable
     private float maxHealth = 100f;
     private float currentHealth;
 
+//This is an event that is called when the laser trap set as alert trap, when the player enters it, it will trigger and call for the event.
     public static event Action<LaserTrap> OnAlertTriggered;
+//This is an event that is called whenever the player stays inside the alert trap, and passes the time.
     public static event Action<LaserTrap, float> OnAlertStay;
 
     [SerializeField]
@@ -30,11 +35,11 @@ public class LaserTrap : MonoBehaviour, ITrigerrable, IDamageable
     public LaserType GetLaserType => type;
 
 
-
+// The damage deal to player when player enters a damage trap.
     [SerializeField]
     private float damageRate = 0.5f;
     public float GetDamageRate => damageRate;
-
+//This is the part for the alert laser trap, the longer player stays, the intersity of the laser gets higher, I haven't set the purpose for this but is can be use when I need.
     [SerializeField]
     private float alertRate = 0.25f;
     public float GetAlertRate => alertRate;

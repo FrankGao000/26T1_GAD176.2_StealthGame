@@ -1,3 +1,4 @@
+//This is the script for the turrets.
 using UnityEngine;
 public class Turret : ParentClass
 {
@@ -87,6 +88,7 @@ public class Turret : ParentClass
             projRB.linearVelocity = barrelBase.forward * 80f;
         }
     }
+    //Seeing if the target is in the vision (Player Character)
     private bool InVision()
     {
         if(!inRange)
@@ -288,7 +290,7 @@ public class Turret : ParentClass
 
             targetRotation = Mathf.Clamp(targetRotation, -turret.LeftLimit, turret.rightLimit);
             limitedRotationAngle = Mathf.MoveTowards(limitedRotationAngle, targetRotation, turret.RotationSpeed * Time.deltaTime);
-            //Need a reference for epsilon
+            //Epsilon is a smallest float value in unity, the purpose of this is to check for the turret precision.
             if (Mathf.Abs(limitedRotationAngle) > Mathf.Epsilon)
             {
                 turretBase.localEulerAngles = Vector3.up * limitedRotationAngle;
